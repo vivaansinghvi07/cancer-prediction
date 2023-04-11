@@ -55,12 +55,12 @@ def plot(method):
 
     # settings for plot
     stat_count = len(yes_symptom_yes_cancer)
-    x_size, y_size = stat_count, stat_count / 2
+    x_size, y_size = 10, 6
     fig = plt.figure(figsize=(x_size, y_size))
     bar_width = x_size / stat_count / 3
 
     # determines x-axis
-    x_axis = np.arange(1, stat_count+1, 1)
+    x_axis = np.arange(0, x_size, x_size / stat_count)
 
     # plots yes_cancer bar
     plt.bar(x_axis, yes_symptom_no_cancer, bar_width, color="lightblue", label="Symptom, No Cancer")
@@ -70,10 +70,10 @@ def plot(method):
     plt.bar(x_axis + bar_width * 1.1, no_symptom_yes_cancer, bar_width, color="red", label="No Symptom, Cancer")
 
     # sets labels
-    plt.xticks(x_axis + bar_width / 2, map(add_newlines, df.keys()), fontsize=5)
+    plt.xticks(x_axis + bar_width / 2, map(add_newlines, df.keys()), fontsize=8)
     plt.xlabel(x_label)
     plt.ylabel("Percent of Reponses")
-    plt.title("")
+    plt.title(f"Prevalence of Lung Cancer In Individuals With and Without Certain {x_label}")
 
     # shows figure
     plt.legend(loc="best")
