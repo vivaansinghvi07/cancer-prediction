@@ -3,76 +3,93 @@ import matplotlib.pyplot as plt     # plotting resutls
 import numpy as np
 import pandas as pd
 
-# for cleaning up data and adding newlines when text is too long
-def add_newlines(str):
-    return str.replace(" ", "\n", 1)
-
 # columns to use as reference when doing the analysis: 
 # these are possible symtoms one might face if they have lung cancer
 SYMPTOMS = ["YELLOW_FINGERS", "COUGHING", "SHORTNESS OF BREATH", "SWALLOWING DIFFICULTY", "CHEST PAIN", "WHEEZING", "FATIGUE", "YELLOW_FINGERS"]
 # these are factors which may or may not lead to lung cancer
 CAUSES = ["SMOKING", "ALCOHOL CONSUMING", "ANXIETY"]
 
-# label for graph, depending on what is being analyzed
-X_LABEL = "Symptoms and Causes"    
+# for cleaning up data and adding newlines when text is too long
+def add_newlines(str):
+    return str.replace(" ", "\n", 1)
 
-# obtain measurements
-df = pd.read_csv("lung-cancer/data/lung-cancer.csv", usecols=SYMPTOMS+CAUSES)
-cancer_results = pd.read_csv("lung-cancer/data/lung-cancer.csv", usecols=["LUNG_CANCER"])["LUNG_CANCER"]
+def plot(method):
 
-# determines bar heights
-yes_symptom_yes_cancer = []
-no_symptom_yes_cancer  = []
-for stat in df:
+    # label for graph, depending on what is being analyzed
+    x_label = ["Causes", "Symptoms"][int(method) - 1]
 
-    # stores counts of people
-    total_count = yes_count = no_count = 0
+    # obtain measurements
+    df = pd.read_csv("lung-cancer/data/lung-cancer.csv", usecols=eval(x_label.upper()))
+    cancer_results = pd.read_csv("lung-cancer/data/lung-cancer.csv", usecols=["LUNG_CANCER"])["LUNG_CANCER"]
 
-    # stores results and goes through each one
-    results = df[stat]
-    for person in range(len(results)):
-    
-        # checks if they said no to having cancer
-        if cancer_results[person] == "NO":    
-            continue
+    # determines bar heights
+    yes_symptom_yes_cancer = []
+    no_symptom_yes_cancer = []
+    for stat in df:
 
-        # appends counts accordingly
-        if results[person] == 2:
-            yes_count += 1
-        else:
-            no_count += 1
-        total_count += 1
+        # stores counts of people
+        total_count = yes_count = no_count = 0
 
-    # determines percents
-    yes_symptom_yes_cancer.append(yes_count / total_count * 100)
-    no_symptom_yes_cancer.append(no_count / total_count * 100)
+        # stores results and goes through each one
+        results = df[stat]
+        for person in range(len(results)):
+        
+            # checks if they said no to having cancer
+            if cancer_results[person] == "NO":    
+                continue
 
-# creates arrays of 100 percents
-yes_symptom_no_cancer = [100 for _ in range(len(yes_symptom_yes_cancer))]
-no_symptom_no_cancer = [100 for _ in range(len(no_symptom_yes_cancer))]
+            # appends counts accordingly
+            if results[person] == 2:
+                yes_count += 1
+            else:
+                no_count += 1
+            total_count += 1
 
-# settings for plot
-stat_count = len(yes_symptom_yes_cancer)
-x_size, y_size = 10, 5
-fig = plt.figure(figsize=(x_size, y_size))
-bar_width = x_size / stat_count / 3
+        # determines percents
+        yes_symptom_yes_cancer.append(yes_count / total_count * 100)
+        no_symptom_yes_cancer.append(no_count / total_count * 100)
 
-# determines x-axis
-x_axis = np.arange(1, stat_count+1, 1)
+    # creates arrays of 100 percents
+    yes_symptom_no_cancer = [100 for _ in range(len(yes_symptom_yes_cancer))]
+    no_symptom_no_cancer = [100 for _ in range(len(no_symptom_yes_cancer))]
 
-# plots yes_cancer bar
-plt.bar(x_axis, yes_symptom_no_cancer, bar_width, color="lightblue", label="Symptom, No Cancer")
-plt.bar(x_axis, yes_symptom_yes_cancer, bar_width, color="royalblue", label="Symptom, Cancer")
+    # settings for plot
+    stat_count = len(yes_symptom_yes_cancer)
+    x_size, y_size = stat_count, stat_count / 2
+    fig = plt.figure(figsize=(x_size, y_size))
+    bar_width = x_size / stat_count / 3
 
-plt.bar(x_axis + bar_width * 1.1, no_symptom_no_cancer, bar_width, color="pink", label="No Symptom, No Cancer")
-plt.bar(x_axis + bar_width * 1.1, no_symptom_yes_cancer, bar_width, color="red", label="No Symptom, Cancer")
+    # determines x-axis
+    x_axis = np.arange(1, stat_count+1, 1)
 
-# sets labels
-plt.xticks(x_axis + bar_width / 2, map(add_newlines, df.keys()), fontsize=5)
-plt.xlabel(X_LABEL)
-plt.ylabel("Percent of Reponses")
-plt.title("")
+    # plots yes_cancer bar
+    plt.bar(x_axis, yes_symptom_no_cancer, bar_width, color="lightblue", label="Symptom, No Cancer")
+    plt.bar(x_axis, yes_symptom_yes_cancer, bar_width, color="royalblue", label="Symptom, Cancer")
 
-# shows figure
-plt.legend(loc="best")
-plt.show()
+    plt.bar(x_axis + bar_width * 1.1, no_symptom_no_cancer, bar_width, color="pink", label="No Symptom, No Cancer")
+    plt.bar(x_axis + bar_width * 1.1, no_symptom_yes_cancer, bar_width, color="red", label="No Symptom, Cancer")
+
+    # sets labels
+    plt.xticks(x_axis + bar_width / 2, map(add_newlines, df.keys()), fontsize=5)
+    plt.xlabel(x_label)
+    plt.ylabel("Percent of Reponses")
+    plt.title("")
+
+    # shows figure
+    plt.legend(loc="best")
+    plt.show()
+
+if __name__ == "__main__":
+    print(
+        """
+        1. Causes
+        2. Symptoms
+        """
+    )
+    method = input("Enter the type of variable you want to analyse: ")
+
+    # check if method is invalid
+    while method not in ["1", "2"]:
+        method = input("Invalid method! Enter a valid choice: ")
+
+    plot(method)
