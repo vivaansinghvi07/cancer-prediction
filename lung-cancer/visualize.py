@@ -77,7 +77,7 @@ def plot(method):
 
     # shows figure
     plt.legend(loc="best")
-    plt.show()
+    plt.savefig(f"lung-cancer/graphs/{x_label.lower()}.png")
 
 if __name__ == "__main__":
     print(
