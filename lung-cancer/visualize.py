@@ -1,7 +1,6 @@
-import csv                          # view data
 import matplotlib.pyplot as plt     # plotting resutls
-import numpy as np
-import pandas as pd
+import numpy as np                  # math
+import pandas as pd                 # read csv
 
 # columns to use as reference when doing the analysis: 
 # these are possible symtoms one might face if they have lung cancer
