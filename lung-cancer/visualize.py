@@ -4,7 +4,7 @@ import pandas as pd                 # read csv
 
 # columns to use as reference when doing the analysis: 
 # these are possible symtoms one might face if they have lung cancer
-SYMPTOMS = ["YELLOW_FINGERS", "COUGHING", "SHORTNESS OF BREATH", "SWALLOWING DIFFICULTY", "CHEST PAIN", "WHEEZING", "FATIGUE", "YELLOW_FINGERS"]
+SYMPTOMS = ["YELLOW_FINGERS", "COUGHING", "SHORTNESS OF BREATH", "SWALLOWING DIFFICULTY", "CHEST PAIN", "WHEEZING", "FATIGUE"]
 # these are factors which may or may not lead to lung cancer
 CAUSES = ["SMOKING", "ALCOHOL CONSUMING", "ANXIETY"]
 
